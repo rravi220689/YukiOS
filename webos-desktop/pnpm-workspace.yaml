@@ -1,3 +1,4 @@
+dangerouslyAllowAllBuilds: true
 allowBuilds:
   "@mercuryworkshop/scramjet": false
   bufferutil: true

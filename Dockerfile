@@ -14,8 +14,8 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV ELECTRON_SKIP_BINARY_DOWNLOAD=1
 ENV PNPM_FETCH_TIMEOUT=600000
 
-# Copy only package manifest and lockfile from the subdirectory to leverage Docker layer caching
-COPY webos-desktop/package.json webos-desktop/pnpm-lock.yaml ./
+# Copy package manifest, lockfile, and workspace config from the subdirectory to leverage Docker layer caching
+COPY webos-desktop/package.json webos-desktop/pnpm-lock.yaml webos-desktop/pnpm-workspace.yaml* ./
 
 # Install dependencies with increased timeout and fallback
 RUN pnpm config set fetch-timeout 600000 && \

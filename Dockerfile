@@ -10,11 +10,17 @@ WORKDIR /app/webos-desktop
 # Use Corepack to enable pnpm and ensure latest pnpm is available
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
+# Prevent Electron from downloading prebuilt binaries during web build
+ENV ELECTRON_SKIP_BINARY_DOWNLOAD=1
+ENV PNPM_FETCH_TIMEOUT=600000
+
 # Copy only package manifest and lockfile from the subdirectory to leverage Docker layer caching
 COPY webos-desktop/package.json webos-desktop/pnpm-lock.yaml ./
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Install dependencies with increased timeout and fallback
+RUN pnpm config set fetch-timeout 600000 && \
+    pnpm config set fetch-retries 5 && \
+    (pnpm install --frozen-lockfile || pnpm install)
 
 # Copy app source and root assets needed during build (e.g., ../README.md and ../static)
 WORKDIR /app

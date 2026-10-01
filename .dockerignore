@@ -1,0 +1,16 @@
+node_modules
+.pnpm
+dist
+build
+.env
+.env.local
+npm-debug.log
+.DS_Store
+.git
+.idea
+.vscode
+# Dockerfiles and compose can be included or excluded depending on workflow
+Dockerfile*
+
+# logs
+logs

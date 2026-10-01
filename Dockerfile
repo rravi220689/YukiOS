@@ -2,7 +2,7 @@
 # This Dockerfile is adapted to the repository layout where the app lives in the
 # `webos-desktop/` subdirectory. Build context should be the repository root.
 
-FROM node:20-bullseye AS builder
+FROM node:22-bookworm AS builder
 
 # Build inside subdirectory so COPY paths match project layout
 WORKDIR /app/webos-desktop
@@ -16,8 +16,11 @@ COPY webos-desktop/package.json webos-desktop/pnpm-lock.yaml ./
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy app source from the subdirectory
-COPY webos-desktop/ ./
+# Copy app source and root assets needed during build (e.g., ../README.md and ../static)
+WORKDIR /app
+COPY . .
+
+WORKDIR /app/webos-desktop
 
 # Allow projects that use either `build` or `build:dev` script
 ARG BUILD_OUTPUT=dist
